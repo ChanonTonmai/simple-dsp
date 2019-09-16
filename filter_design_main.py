@@ -10,7 +10,7 @@ class filter_design(object):
     def create_tabs(self, N, cutoff, filterDesign, filterType, fs, windowStyle):
 
         self.filterDesigns = ['IIR','FIR']
-        self.filterTypes1 = ['lowpass','highpass']
+        self.filterTypes1 = ['lowpass','highpass','bandpass']
         self.filterTypes2 = ['bandstop','bandpass','Bandstop','Bandpass']
 
         self.isThereAnError = 1 #if there was no error then it will be set to 0
@@ -36,6 +36,12 @@ class filter_design(object):
         elif filterDesign == 'FIR' and filterType == 'highpass' and self.isThereAnError == 0:
             N |= 1
             self.COEFFS = signal.firwin(N, cutoff, window=windowStyle, pass_zero=False)
+        elif filterDesign == 'FIR' and filterType == 'bandpass' and self.isThereAnError == 0:
+            N |= 1
+            self.COEFFS = signal.firwin(N, cutoff,  window=windowStyle, pass_zero=False) 
+        elif filterDesign == 'FIR' and filterType == 'bandstop' and self.isThereAnError == 0:
+            N |= 1
+            self.COEFFS = signal.firwin(N, cutoff, window=windowStyle,) 
         elif filterDesign == 'IIR' and self.isThereAnError == 0:
             self.COEFFS = np.asarray(signal.butter(N, cutoff, btype=filterType, output='ba'))
         else: 
@@ -54,7 +60,7 @@ class filter_design(object):
         fs = self.fs
         fc = self.fc
 
-        upper = fc*2
+        upper = fc*10
         lower = 0
     
 
